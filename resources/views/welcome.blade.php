@@ -87,7 +87,7 @@
 <br>
 welcome to baoyang
 <br>
-<img style="width:420px;"  class="photo" src="/img/manual/user/image090.png" alt=""><br>
+<img style="width:420px;"  class="photo" src="/img/pay.jpg" alt=""><br>
                 </div>
             </div>
         </div>

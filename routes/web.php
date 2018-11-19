@@ -15,6 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/testQR', function () {
-    return view('testQR');
-});
+
+Route::get('/testQR', 'LogsController@index');

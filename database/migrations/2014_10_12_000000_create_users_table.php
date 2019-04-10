@@ -18,6 +18,11 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('nick_name');
+            $table->string('wechat_openid');
+		    $table->string('avatar');
+            $table->decimal('lat', 10, 6);
+            $table->decimal('lng', 10, 6);
             $table->rememberToken();
             $table->timestamps();
         });

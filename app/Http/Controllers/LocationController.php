@@ -61,6 +61,14 @@ class LocationController extends Controller
             $user = User::find($request->input('user_id'));
             $user->lat = $request->input('lat');
             $user->lng = $request->input('lng');
+            $path = 'storage/';
+
+            file_put_contents($path.$user->id.'.jpg',file_get_contents($request->input('avatar')));
+            $file = $this->changeImage($path.$user->id.'.jpg');
+
+
+
+            $user->avatar = $file;
             $user->save();
             return array('status'=>1,'user'=>$user);
         }

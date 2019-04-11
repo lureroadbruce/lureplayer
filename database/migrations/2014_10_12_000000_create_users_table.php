@@ -16,10 +16,10 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->string('nick_name');
-            $table->string('wechat_openid');
+            $table->string('wechat_openid')->unique();
 		    $table->string('avatar');
             $table->decimal('lat', 10, 6);
             $table->decimal('lng', 10, 6);

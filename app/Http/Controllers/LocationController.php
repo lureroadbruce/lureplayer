@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\User;
 class LocationController extends Controller
 {
+
+    public function getLocationList()
+    {
+        $list = User::select('nick_name as name', 'lat','lng','id','avatar')->get();
+        return $list;
+    }
     public function wechatLogin(Request $request)
     {
 
@@ -16,7 +22,7 @@ class LocationController extends Controller
         $open_id = $this->get_openid($code,$app_id,$app_secret);
         if($open_id)
         {
-            $user = Member::where('wechat_openid',$open_id)->select('nickname', 'wechat_openid as open_id','id','avatar')->first();
+            $user = User::where('wechat_openid',$open_id)->select('nick_name', 'wechat_openid as open_id','id','avatar')->first();
             if($user)
             {
                 return ['status'=>0,'user'=>$user];
@@ -47,6 +53,41 @@ class LocationController extends Controller
             return null;
         }
     }
+
+    public function setLocation(Request $request)
+    {
+        if($request->has('user_id'))
+        {
+            $user = User::find($request->input('user_id'));
+            $user->lat = $request->input('lat');
+            $user->lng = $request->input('lng');
+            $user->save();
+            return array('status'=>1,'user'=>$user);
+        }
+        else
+        {
+            $user = new User;
+            $user->name = $user->nick_name = $user->email = $request->input('nick_name');
+            $user->lat = $request->input('lat');
+            $user->lng = $request->input('lng');
+            $user->wechat_openid = $request->input('open_id');
+            $user->password = bcrypt('888888');
+            $user->avatar = $request->input('avatar');
+            $user->save();
+            $path = 'storage/';
+
+            file_put_contents($path.$user->id.'.jpg',file_get_contents($request->input('avatar')));
+            $file = $this->changeImage($path.$user->id.'.jpg');
+
+
+
+            $user->avatar = $file;
+            $user->save();
+            return array('status'=>1,'user'=>$user);
+        }
+    }
+
+
 
 
 
@@ -103,8 +144,8 @@ class LocationController extends Controller
         }
         $filename = date('Y-m-d-H-i-s').'-'.uniqid().'.png';
 
-        imagepng($img,'storage/'.$filename);
+        imagepng($img,$ext['dirname'].'/'.$filename);
 
-        return $this->path='storage/'.$filename;
+        return $ext['dirname'].'/'.$filename;
     }
 }

@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('wechatLogin', 'LocationController@wechatLogin');
+Route::post('setLocation', 'LocationController@setLocation');
+Route::get('getLocationList', 'LocationController@getLocationList');

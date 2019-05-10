@@ -154,6 +154,6 @@ class LocationController extends Controller
 
         imagepng($img,$ext['dirname'].'/'.$filename);
 
-        return '/'.$filename;
+        return 'storage/'.$filename;
     }
 }

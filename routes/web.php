@@ -14,4 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/pic2', function () {
+    return view('pic2');
+});
+Route::get('/pic3', function () {
+    return view('pic3');
+});

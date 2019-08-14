@@ -20,7 +20,11 @@
                 height: 100vh;
                 margin: 0;
             }
-
+           body{
+            font-family: "华文细黑";
+            background:url("/img/img_1.jpg") no-repeat;
+            background-size: 100%;
+        }
             .full-height {
                 height: 100vh;
             }
@@ -93,7 +97,7 @@ welcome to baoyang
             <a href="pic2" style="width:100%;height:100%">
             <img style="width:100%;height:100%"  class="photo" src="/img/pic1.jpg" alt="">
         </a>
-
+-->
         </div>
     </body>
 </html>

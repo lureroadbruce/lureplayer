@@ -91,7 +91,7 @@ welcome to baoyang
                 </div>
             </div> -->
             <a href="pic3" style="width:100%;height:100%">
-            <img style="width:100%;height:100%"  class="photo" src="/img/pic2.jpg" alt="">
+            <img style="width:100%;height:100%"  class="photo" src="/img/img_1.jpg" alt="">
         </a>
 
         </div>

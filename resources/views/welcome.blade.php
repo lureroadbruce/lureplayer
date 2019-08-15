@@ -98,7 +98,7 @@ welcome to baoyang
 
 
             <a href="https://shtam26968.jiandaoyun.com/f/5d54c20c9acdf51e93280638" style="width:100%;">
-            <img style="width:100%;"  class="photo" src="/img/img_1.jpg" alt="">
+            <img style="width:100%;"  class="photo" src="/img/img_1.jpg?v=20" alt="">
         </a>
 
 

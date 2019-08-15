@@ -20,11 +20,7 @@
                 height: 100vh;
                 margin: 0;
             }
-           body{
-            font-family: "华文细黑";
-            background:url("/img/img_1.jpg?v=2") no-repeat;
-            background-size: 100%;
-        }
+
             .full-height {
                 height: 100vh;
             }

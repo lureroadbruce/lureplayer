@@ -98,6 +98,15 @@ welcome to baoyang
             <img style="width:100%;height:100%"  class="photo" src="/img/pic1.jpg" alt="">
         </a>
 -->
+
+
+
+            <a href="https://shtam26968.jiandaoyun.com/f/5d54c20c9acdf51e93280638" style="width:100%;">
+            <img style="width:100%;"  class="photo" src="/img/img_1.jpg" alt="">
+        </a>
+
+
+
         </div>
     </body>
 </html>

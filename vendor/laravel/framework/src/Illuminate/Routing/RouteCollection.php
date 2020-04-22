@@ -316,16 +316,6 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * Get all of the routes keyed by their name.
-     *
-     * @return array
-     */
-    public function getRoutesByName()
-    {
-        return $this->nameList;
-    }
-
-    /**
      * Get an iterator for the items.
      *
      * @return \ArrayIterator

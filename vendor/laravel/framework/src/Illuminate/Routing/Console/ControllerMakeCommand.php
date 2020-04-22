@@ -89,7 +89,7 @@ class ControllerMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Build the replacements for a parent controller.
+     * Build the replacemnets for a parent controller.
      *
      * @return array
      */

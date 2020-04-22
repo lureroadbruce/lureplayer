@@ -245,20 +245,6 @@ if (! function_exists('array_pull')) {
     }
 }
 
-if (! function_exists('array_random')) {
-    /**
-     * Get a random value from an array.
-     *
-     * @param  array  $array
-     * @param  int|null  $num
-     * @return mixed
-     */
-    function array_random($array, $num = null)
-    {
-        return Arr::random($array, $num);
-    }
-}
-
 if (! function_exists('array_set')) {
     /**
      * Set an array item to a given value using "dot" notation.
@@ -278,13 +264,13 @@ if (! function_exists('array_set')) {
 
 if (! function_exists('array_sort')) {
     /**
-     * Sort the array by the given callback or attribute name.
+     * Sort the array using the given callback.
      *
      * @param  array  $array
-     * @param  callable|string  $callback
+     * @param  callable  $callback
      * @return array
      */
-    function array_sort($array, $callback)
+    function array_sort($array, callable $callback)
     {
         return Arr::sort($array, $callback);
     }
@@ -559,45 +545,6 @@ if (! function_exists('ends_with')) {
     function ends_with($haystack, $needles)
     {
         return Str::endsWith($haystack, $needles);
-    }
-}
-
-if (! function_exists('env')) {
-    /**
-     * Gets the value of an environment variable.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
-     */
-    function env($key, $default = null)
-    {
-        $value = getenv($key);
-
-        if ($value === false) {
-            return value($default);
-        }
-
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
-            case 'false':
-            case '(false)':
-                return false;
-            case 'empty':
-            case '(empty)':
-                return '';
-            case 'null':
-            case '(null)':
-                return;
-        }
-
-        if (strlen($value) > 1 && Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
-            return substr($value, 1, -1);
-        }
-
-        return $value;
     }
 }
 
@@ -917,20 +864,6 @@ if (! function_exists('str_slug')) {
     function str_slug($title, $separator = '-')
     {
         return Str::slug($title, $separator);
-    }
-}
-
-if (! function_exists('str_start')) {
-    /**
-     * Begin a string with a single instance of a given value.
-     *
-     * @param  string  $value
-     * @param  string  $prefix
-     * @return string
-     */
-    function str_start($value, $prefix)
-    {
-        return Str::start($value, $prefix);
     }
 }
 

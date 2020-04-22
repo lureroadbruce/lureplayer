@@ -12,10 +12,9 @@
 namespace Symfony\Component\HttpKernel\DataCollector;
 
 use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
-use Symfony\Component\VarDumper\Caster\CutStub;
+use Symfony\Component\VarDumper\Caster\ClassStub;
 use Symfony\Component\VarDumper\Cloner\ClonerInterface;
 use Symfony\Component\VarDumper\Cloner\Data;
-use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 /**
@@ -28,7 +27,7 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
  */
 abstract class DataCollector implements DataCollectorInterface, \Serializable
 {
-    protected $data = [];
+    protected $data = array();
 
     /**
      * @var ValueExporter
@@ -38,19 +37,16 @@ abstract class DataCollector implements DataCollectorInterface, \Serializable
     /**
      * @var ClonerInterface
      */
-    private $cloner;
+    private static $cloner;
 
     public function serialize()
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-        $isCalledFromOverridingMethod = isset($trace[1]['function'], $trace[1]['object']) && 'serialize' === $trace[1]['function'] && $this === $trace[1]['object'];
-
-        return $isCalledFromOverridingMethod ? $this->data : serialize($this->data);
+        return serialize($this->data);
     }
 
     public function unserialize($data)
     {
-        $this->data = \is_array($data) ? $data : unserialize($data);
+        $this->data = unserialize($data);
     }
 
     /**
@@ -65,20 +61,16 @@ abstract class DataCollector implements DataCollectorInterface, \Serializable
      */
     protected function cloneVar($var)
     {
-        if ($var instanceof Data) {
-            return $var;
-        }
-        if (null === $this->cloner) {
-            if (class_exists(CutStub::class)) {
-                $this->cloner = new VarCloner();
-                $this->cloner->setMaxItems(-1);
-                $this->cloner->addCasters($this->getCasters());
+        if (null === self::$cloner) {
+            if (class_exists(ClassStub::class)) {
+                self::$cloner = new VarCloner();
+                self::$cloner->setMaxItems(-1);
             } else {
-                @trigger_error(sprintf('Using the %s() method without the VarDumper component is deprecated since Symfony 3.2 and won\'t be supported in 4.0. Install symfony/var-dumper version 3.2 or above.', __METHOD__), E_USER_DEPRECATED);
-                $this->cloner = false;
+                @trigger_error(sprintf('Using the %s() method without the VarDumper component is deprecated since version 3.2 and won\'t be supported in 4.0. Install symfony/var-dumper version 3.2 or above.', __METHOD__), E_USER_DEPRECATED);
+                self::$cloner = false;
             }
         }
-        if (false === $this->cloner) {
+        if (false === self::$cloner) {
             if (null === $this->valueExporter) {
                 $this->valueExporter = new ValueExporter();
             }
@@ -86,7 +78,7 @@ abstract class DataCollector implements DataCollectorInterface, \Serializable
             return $this->valueExporter->exportValue($var);
         }
 
-        return $this->cloner->cloneVar($var);
+        return self::$cloner->cloneVar($var);
     }
 
     /**
@@ -100,32 +92,12 @@ abstract class DataCollector implements DataCollectorInterface, \Serializable
      */
     protected function varToString($var)
     {
-        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.2 and will be removed in 4.0. Use cloneVar() instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The %s() method is deprecated since version 3.2 and will be removed in 4.0. Use cloneVar() instead.', __METHOD__), E_USER_DEPRECATED);
 
         if (null === $this->valueExporter) {
             $this->valueExporter = new ValueExporter();
         }
 
         return $this->valueExporter->exportValue($var);
-    }
-
-    /**
-     * @return callable[] The casters to add to the cloner
-     */
-    protected function getCasters()
-    {
-        return [
-            '*' => function ($v, array $a, Stub $s, $isNested) {
-                if (!$v instanceof Stub) {
-                    foreach ($a as $k => $v) {
-                        if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof Stub) {
-                            $a[$k] = new CutStub($v);
-                        }
-                    }
-                }
-
-                return $a;
-            },
-        ];
     }
 }

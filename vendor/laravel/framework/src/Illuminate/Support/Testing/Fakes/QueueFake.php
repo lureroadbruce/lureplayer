@@ -129,7 +129,7 @@ class QueueFake extends QueueManager implements Queue
      */
     public function push($job, $data = '', $queue = null)
     {
-        $this->jobs[is_object($job) ? get_class($job) : $job][] = [
+        $this->jobs[get_class($job)][] = [
             'job' => $job,
             'queue' => $queue,
         ];

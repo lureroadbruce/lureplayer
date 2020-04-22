@@ -24,7 +24,7 @@ trait MakesHttpRequests
      * @param  array  $server
      * @return $this
      */
-    public function withServerVariables(array $server)
+    protected function withServerVariables(array $server)
     {
         $this->serverVariables = $server;
 

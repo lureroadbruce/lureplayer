@@ -1,16 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace DeepCopy\TypeFilter;
 
-final class ShallowCopyFilter implements TypeFilter
+class ShallowCopyFilter implements TypeFilter
 {
     /**
      * {@inheritdoc}
-     *
-     * @param object $value
      */
-    public function apply($value): object
+    public function apply($element)
     {
-        return clone $value;
+        return clone $element;
     }
 }

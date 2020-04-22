@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Illuminate\Support\HtmlString;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -432,6 +433,45 @@ if (! function_exists('encrypt')) {
     }
 }
 
+if (! function_exists('env')) {
+    /**
+     * Gets the value of an environment variable.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    function env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false) {
+            return value($default);
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return;
+        }
+
+        if (strlen($value) > 1 && Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
+            return substr($value, 1, -1);
+        }
+
+        return $value;
+    }
+}
+
 if (! function_exists('event')) {
     /**
      * Dispatch an event and call the listeners.
@@ -527,7 +567,7 @@ if (! function_exists('mix')) {
      */
     function mix($path, $manifestDirectory = '')
     {
-        static $manifests = [];
+        static $manifest;
 
         if (! starts_with($path, '/')) {
             $path = "/{$path}";
@@ -541,19 +581,15 @@ if (! function_exists('mix')) {
             return new HtmlString("//localhost:8080{$path}");
         }
 
-        $manifestPath = public_path($manifestDirectory.'/mix-manifest.json');
-
-        if (! isset($manifests[$manifestPath])) {
-            if (! file_exists($manifestPath)) {
+        if (! $manifest) {
+            if (! file_exists($manifestPath = public_path($manifestDirectory.'/mix-manifest.json'))) {
                 throw new Exception('The Mix manifest does not exist.');
             }
 
-            $manifests[$manifestPath] = json_decode(file_get_contents($manifestPath), true);
+            $manifest = json_decode(file_get_contents($manifestPath), true);
         }
 
-        $manifest = $manifests[$manifestPath];
-
-        if (! isset($manifest[$path])) {
+        if (! array_key_exists($path, $manifest)) {
             throw new Exception(
                 "Unable to locate Mix file: {$path}. Please check your ".
                 'webpack.mix.js output paths and try again.'
@@ -602,7 +638,7 @@ if (! function_exists('public_path')) {
      */
     function public_path($path = '')
     {
-        return app()->make('path.public').($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
+        return app()->make('path.public').($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
 
@@ -778,18 +814,18 @@ if (! function_exists('trans')) {
     /**
      * Translate the given message.
      *
-     * @param  string  $key
+     * @param  string  $id
      * @param  array   $replace
      * @param  string  $locale
-     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
+     * @return \Illuminate\Contracts\Translation\Translator|string
      */
-    function trans($key = null, $replace = [], $locale = null)
+    function trans($id = null, $replace = [], $locale = null)
     {
-        if (is_null($key)) {
+        if (is_null($id)) {
             return app('translator');
         }
 
-        return app('translator')->trans($key, $replace, $locale);
+        return app('translator')->trans($id, $replace, $locale);
     }
 }
 
@@ -797,15 +833,15 @@ if (! function_exists('trans_choice')) {
     /**
      * Translates the given message based on a count.
      *
-     * @param  string  $key
+     * @param  string  $id
      * @param  int|array|\Countable  $number
      * @param  array   $replace
      * @param  string  $locale
      * @return string
      */
-    function trans_choice($key, $number, array $replace = [], $locale = null)
+    function trans_choice($id, $number, array $replace = [], $locale = null)
     {
-        return app('translator')->transChoice($key, $number, $replace, $locale);
+        return app('translator')->transChoice($id, $number, $replace, $locale);
     }
 }
 

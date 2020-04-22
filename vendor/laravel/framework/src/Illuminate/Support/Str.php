@@ -38,17 +38,13 @@ class Str
      */
     public static function after($subject, $search)
     {
-        if ($search == '') {
+        if (! static::contains($subject, $search)) {
             return $subject;
         }
 
-        $pos = strpos($subject, $search);
+        $end = strpos($subject, $search) + static::length($search);
 
-        if ($pos === false) {
-            return $subject;
-        }
-
-        return substr($subject, $pos + strlen($search));
+        return static::substr($subject, $end, static::length($subject));
     }
 
     /**
@@ -321,10 +317,6 @@ class Str
      */
     public static function replaceFirst($search, $replace, $subject)
     {
-        if ($search == '') {
-            return $subject;
-        }
-
         $position = strpos($subject, $search);
 
         if ($position !== false) {
@@ -351,20 +343,6 @@ class Str
         }
 
         return $subject;
-    }
-
-    /**
-     * Begin a string with a single instance of a given value.
-     *
-     * @param  string  $value
-     * @param  string  $prefix
-     * @return string
-     */
-    public static function start($value, $prefix)
-    {
-        $quoted = preg_quote($prefix, '/');
-
-        return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
     }
 
     /**

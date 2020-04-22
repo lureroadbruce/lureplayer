@@ -1,19 +1,19 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace DeepCopy\Matcher\Doctrine;
 
 use DeepCopy\Matcher\Matcher;
 use Doctrine\Common\Persistence\Proxy;
-use ReflectionProperty;
 
-final class DoctrineProxyMatcher implements Matcher
+/**
+ * Match a Doctrine Proxy class.
+ */
+class DoctrineProxyMatcher implements Matcher
 {
     /**
-     * Matches a Doctrine Proxy class.
-     *
      * {@inheritdoc}
      */
-    public function matches(object $object, ReflectionProperty $reflectionProperty): bool
+    public function matches($object, $property)
     {
         return $object instanceof Proxy;
     }

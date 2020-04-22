@@ -4,13 +4,10 @@ namespace Illuminate\Redis\Connections;
 
 use Closure;
 
-/**
- * @mixin \Redis
- */
 class PhpRedisConnection extends Connection
 {
     /**
-     * Create a new PhpRedis connection.
+     * Create a new Predis connection.
      *
      * @param  \Redis  $client
      * @return void
@@ -66,7 +63,7 @@ class PhpRedisConnection extends Connection
     }
 
     /**
-     * Removes the first count occurrences of the value element from the list.
+     * Removes the first count occurences of the value element from the list.
      *
      * @param  string  $key
      * @param  int  $count

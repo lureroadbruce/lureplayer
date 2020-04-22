@@ -244,17 +244,11 @@ class Migrator
         foreach ($migrations as $migration) {
             $migration = (object) $migration;
 
-            if (! $file = Arr::get($files, $migration->migration)) {
-                $this->note("<fg=red>Migration not found:</> {$migration->migration}");
-
-                continue;
-            }
-
-            $rolledBack[] = $file;
+            $rolledBack[] = $files[$migration->migration];
 
             $this->runDown(
-                $file, $migration,
-                Arr::get($options, 'pretend', false)
+                $files[$migration->migration],
+                $migration, Arr::get($options, 'pretend', false)
             );
         }
 

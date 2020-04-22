@@ -1,11 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace DeepCopy\Reflection;
 
-use ReflectionClass;
-use ReflectionProperty;
-
-final class ReflectionHelper
+class ReflectionHelper
 {
     /**
      * Retrieves all properties (including private ones), from object and all its ancestors.
@@ -13,33 +10,30 @@ final class ReflectionHelper
      * Standard \ReflectionClass->getProperties() does not return private properties from ancestor classes.
      *
      * @author muratyaman@gmail.com
-     * @see https://secure.php.net/manual/en/reflectionclass.getproperties.php
+     * @see http://php.net/manual/en/reflectionclass.getproperties.php
      *
-     * @param ReflectionClass $reflectionClass
-     *
-     * @return ReflectionProperty[]
+     * @param \ReflectionClass $ref
+     * @return \ReflectionProperty[]
      */
-    public static function getProperties(ReflectionClass $reflectionClass): array
+    public static function getProperties(\ReflectionClass $ref)
     {
-        $reflectionProperties = $reflectionClass->getProperties();
-        $reflectionPropertiesByName = [];
+        $props = $ref->getProperties();
+        $propsArr = array();
 
-        foreach ($reflectionProperties as $reflectionProperty) {
-            $propertyName = $reflectionProperty->getName();
-            $reflectionPropertiesByName[$propertyName] = $reflectionProperty;
+        foreach ($props as $prop) {
+            $propertyName = $prop->getName();
+            $propsArr[$propertyName] = $prop;
         }
 
-        if ($parentClass = $reflectionClass->getParentClass()) {
-            $parentReflectionPropertiesByName = self::getProperties($parentClass);
-
-            foreach ($reflectionPropertiesByName as $name => $reflectionProperty) {
-                // When a property collides by name, the child one takes precedence
-                $parentReflectionPropertiesByName[$name] = $reflectionProperty;
+        if ($parentClass = $ref->getParentClass()) {
+            $parentPropsArr = self::getProperties($parentClass);
+            foreach ($propsArr as $key => $property) {
+                $parentPropsArr[$key] = $property;
             }
 
-            return $parentReflectionPropertiesByName;
+            return $parentPropsArr;
         }
 
-        return $reflectionPropertiesByName;
+        return $propsArr;
     }
 }

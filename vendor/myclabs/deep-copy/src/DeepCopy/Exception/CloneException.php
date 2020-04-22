@@ -1,9 +1,6 @@
-<?php declare(strict_types=1);
-
+<?php
 namespace DeepCopy\Exception;
 
-use UnexpectedValueException;
-
-class CloneException extends UnexpectedValueException
+class CloneException extends \UnexpectedValueException
 {
-}
+} 

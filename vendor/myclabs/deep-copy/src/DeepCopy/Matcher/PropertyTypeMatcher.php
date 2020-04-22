@@ -1,20 +1,26 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace DeepCopy\Matcher;
 
 use ReflectionProperty;
 
 /**
- * Matches a property by its type.
+ * Match a property by its type
  *
  * It is recommended to use {@see DeepCopy\TypeFilter\TypeFilter} instead, as it applies on all occurrences
  * of given type in copied context (eg. array elements), not just on object properties.
  */
-final class PropertyTypeMatcher implements Matcher
+class PropertyTypeMatcher implements Matcher
 {
+    /**
+     * @var string
+     */
     private $propertyType;
 
-    public function __construct(string $propertyType)
+    /**
+     * @param string $propertyType Property type
+     */
+    public function __construct($propertyType)
     {
         $this->propertyType = $propertyType;
     }
@@ -22,8 +28,9 @@ final class PropertyTypeMatcher implements Matcher
     /**
      * {@inheritdoc}
      */
-    public function matches(object $object, ReflectionProperty $reflectionProperty): bool
+    public function matches($object, $property)
     {
+        $reflectionProperty = new ReflectionProperty($object, $property);
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object) instanceof $this->propertyType;
